@@ -70,7 +70,9 @@ Moodle APIs.
 - Pros: one round trip, no extra token handling, Python server unchanged.
 - Cons: ~33% size overhead, whole file in PHP memory. Mitigation: `backup_course` refuses courses whose .mbz exceeds 100 MB (contract); `restore_course` rejects payloads over the same limit before decoding.
 - Alternatives (draft file area upload / pluginfile download with token) rejected for v1: more calls and the wrapper would need rewriting. Revisit if 100 MB proves too small.
-- Backup runs synchronously, content-only by default (no users, no logs), temp file deleted after reading. Restore always makes a new course, then deletes the temp file; fails if `shortname` already exists.
+- Deployment: a 100 MB backup is ~134 MB of base64 in one POST, so the web server must allow it: nginx `client_max_body_size` and PHP `post_max_size` of at least 140M, and `memory_limit` of 512M or more. Without this, large restores fail at the web server (HTTP 413, seen in testing) before the plugin runs. The plugin's own 100 MB check is a second line of defence.
+- Users: `includeusers=1` needs `moodle/backup:userinfo`. On restore, users in the backup are only restored when the caller holds `moodle/restore:userinfo`; the restore never needs the caller to be able to change names, because creating a course lets you choose them.
+- Backup runs synchronously, content-only by default (no users, no logs), temp file deleted after reading. Restore always makes a new course (visibility as in the backup), deletes its temp files, and fails if `shortname` already exists. If a restore fails after the course row was created, the half-made course is deleted.
 
 ## Not ours
 

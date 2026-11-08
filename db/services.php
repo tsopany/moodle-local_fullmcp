@@ -172,6 +172,20 @@ $functions = [
         'ajax' => true,
         'capabilities' => 'moodle/course:manageactivities, mod/assign:addinstance',
     ],
+    'local_fullmcp_backup_course' => [
+        'classname' => 'local_fullmcp\\external\\backup_course',
+        'description' => 'Back a course up, returned as base64.',
+        'type' => 'write',
+        'ajax' => true,
+        'capabilities' => 'moodle/backup:backupcourse',
+    ],
+    'local_fullmcp_restore_course' => [
+        'classname' => 'local_fullmcp\\external\\restore_course',
+        'description' => 'Restore a base64 backup into a new course.',
+        'type' => 'write',
+        'ajax' => true,
+        'capabilities' => 'moodle/restore:restorecourse, moodle/course:create',
+    ],
 ];
 
 $services = [

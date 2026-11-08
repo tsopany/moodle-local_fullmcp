@@ -24,6 +24,9 @@
 
 defined('MOODLE_INTERNAL') || die();
 
+$string['backupfailed'] = 'The course backup did not produce a file.';
+$string['backuptoolarge'] = 'The backup is larger than the limit of {$a}.';
 $string['pluginname'] = 'Full MCP';
 $string['privacy:metadata'] = 'The Full MCP plugin does not store any personal data.';
+$string['restorefailed'] = 'The backup cannot be restored: {$a}';
 $string['servicename'] = 'Full MCP Service';

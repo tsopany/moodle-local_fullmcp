@@ -25,7 +25,7 @@
 defined('MOODLE_INTERNAL') || die();
 
 $plugin->component = 'local_fullmcp';
-$plugin->version = 2026110803;
+$plugin->version = 2026110804;
 $plugin->requires = 2026100500; // Moodle 5.3.
 $plugin->maturity = MATURITY_ALPHA;
 $plugin->release = '0.1.0';
