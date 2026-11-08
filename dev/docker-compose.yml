@@ -1,0 +1,27 @@
+# Throwaway dev Moodle 5.3 for testing local_fullmcp. localhost only; never point at real data.
+# Run: docker compose -f dev/docker-compose.yml up -d   (admin / Admin123!)
+services:
+  db:
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_USER: moodle
+      POSTGRES_PASSWORD: moodle
+      POSTGRES_DB: moodle
+  moodle:
+    image: erseco/alpine-moodle:5.3.0
+    depends_on: [db]
+    ports: ["8080:8080"]
+    environment:
+      SITE_URL: http://localhost:8080
+      DB_TYPE: pgsql
+      DB_HOST: db
+      DB_PORT: "5432"
+      DB_NAME: moodle
+      DB_USER: moodle
+      DB_PASS: moodle
+      MOODLE_USERNAME: admin
+      MOODLE_PASSWORD: Admin123!
+      MOODLE_EMAIL: admin@example.test
+      MOODLE_SITENAME: fullmcp-dev
+    volumes:
+      - ..:/var/www/html/public/local/fullmcp
