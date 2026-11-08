@@ -15,6 +15,14 @@ activities.
 2. Enable web services and the REST protocol; enable the "Full MCP Service".
 3. Create a service user with a minimal role (see docs/functions.md), add it to the service, create a token.
 
+## Tests
+
+PHPUnit tests are in `tests/`. Run them in a Moodle checkout with the plugin installed and PHPUnit initialised:
+
+    vendor/bin/phpunit --testsuite local_fullmcp_testsuite
+
+The throwaway dev site in `dev/` can be used for this (`composer install` plus `admin/tool/phpunit/cli/init.php`).
+
 ## Backup and restore size
 
 `backup_course` and `restore_course` move the .mbz as base64 inside the request (max 100 MB).
