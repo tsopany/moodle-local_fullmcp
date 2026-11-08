@@ -74,11 +74,32 @@ Moodle APIs.
 - Users: `includeusers=1` needs `moodle/backup:userinfo`. On restore, users in the backup are only restored when the caller holds `moodle/restore:userinfo`; the restore never needs the caller to be able to change names, because creating a course lets you choose them.
 - Backup runs synchronously, content-only by default (no users, no logs), temp file deleted after reading. Restore always makes a new course (visibility as in the backup), deletes its temp files, and fails if `shortname` already exists. If a restore fails after the course row was created, the half-made course is deleted.
 
-## Not ours
+## Core functions also in the service (v1)
 
-`update_course`, `delete_courses`, enrol, etc. use core functions. `build_course`
-is client-side composition of the above. The wrapper's health check only needs
-any function starting with `local_fullmcp_`.
+The service also holds 14 core Moodle functions, so the MCP server can read course
+structure and build courses. Decision for v1: **no tool that reads or changes other
+people's personal data is exposed**, and nothing destructive on users or courses.
+
+| Kind | Functions |
+|---|---|
+| Reads | `core_webservice_get_site_info`, `core_course_get_courses`, `core_course_get_courses_by_field`, `core_course_get_contents`, `core_calendar_get_action_events_by_timesort`, `core_competency_list_course_competencies`, `mod_assign_get_assignments`, `mod_forum_get_forums_by_courses`, `mod_quiz_get_quizzes_by_courses` |
+| Writes | `core_course_create_courses`, `core_course_update_courses`, `core_course_create_categories`, `core_course_import_course`, `core_files_upload` |
+
+Deliberately left out: user create/update/delete, role assign/unassign, enrol/unenrol,
+cohorts, groups, messaging, grades and grading, submissions, quiz attempts and answers,
+completion per user, notifications, learning plans, enrolled-user lists, forum
+discussions and posts, and deleting courses or categories. `tests/service_test.php`
+fails if any of these is added to the service.
+
+`build_course` in the Python server uses `core_course_delete_courses` to roll back; that call
+is refused by the service, so a failed build leaves the half-built course in place.
+
+Later, a second service (own token, own user with wider permissions) could hold the
+personal-data reads for use with local models only.
+
+The service user also needs, for `core_course_update_courses`:
+`moodle/course:changefullname`, `moodle/course:changeshortname`, `moodle/course:changesummary`,
+`moodle/course:visibility`; and for categories `moodle/category:manage`.
 
 ## Capability checks (design)
 

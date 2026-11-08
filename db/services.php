@@ -188,9 +188,31 @@ $functions = [
     ],
 ];
 
+// Core functions the MCP server also uses: course structure reads and course-building writes only.
+// Nothing here returns or changes personal data of other users (no users, enrolments, grades, submissions,
+// quiz attempts, messages, roles or deletions).
+$corefunctions = [
+    // Reads.
+    'core_webservice_get_site_info',
+    'core_course_get_courses',
+    'core_course_get_courses_by_field',
+    'core_course_get_contents',
+    'core_calendar_get_action_events_by_timesort',
+    'core_competency_list_course_competencies',
+    'mod_assign_get_assignments',
+    'mod_forum_get_forums_by_courses',
+    'mod_quiz_get_quizzes_by_courses',
+    // Writes that build or change courses.
+    'core_course_create_courses',
+    'core_course_update_courses',
+    'core_course_create_categories',
+    'core_course_import_course',
+    'core_files_upload',
+];
+
 $services = [
     'Full MCP Service' => [
-        'functions' => array_keys($functions),
+        'functions' => array_merge(array_keys($functions), $corefunctions),
         'restrictedusers' => 1,
         'enabled' => 1,
         'shortname' => 'local_fullmcp',
