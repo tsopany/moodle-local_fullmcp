@@ -144,6 +144,34 @@ $functions = [
         'ajax' => true,
         'capabilities' => 'mod/quiz:manage, moodle/question:add',
     ],
+    'local_fullmcp_create_book' => [
+        'classname' => 'local_fullmcp\\external\\create_book',
+        'description' => 'Create a Book with its first chapter.',
+        'type' => 'write',
+        'ajax' => true,
+        'capabilities' => 'moodle/course:manageactivities, mod/book:addinstance, mod/book:edit',
+    ],
+    'local_fullmcp_create_forum' => [
+        'classname' => 'local_fullmcp\\external\\create_forum',
+        'description' => 'Create a Forum.',
+        'type' => 'write',
+        'ajax' => true,
+        'capabilities' => 'moodle/course:manageactivities, mod/forum:addinstance',
+    ],
+    'local_fullmcp_create_choice' => [
+        'classname' => 'local_fullmcp\\external\\create_choice',
+        'description' => 'Create a Choice (poll).',
+        'type' => 'write',
+        'ajax' => true,
+        'capabilities' => 'moodle/course:manageactivities, mod/choice:addinstance',
+    ],
+    'local_fullmcp_create_assignment' => [
+        'classname' => 'local_fullmcp\\external\\create_assignment',
+        'description' => 'Create an Assignment.',
+        'type' => 'write',
+        'ajax' => true,
+        'capabilities' => 'moodle/course:manageactivities, mod/assign:addinstance',
+    ],
 ];
 
 $services = [

@@ -54,6 +54,11 @@ Capabilities for all `add_*`: `mod/quiz:manage` (module ctx) + `moodle/question:
 | `add_numerical_question` | quizcmid, name, questiontext, answers=[{answer, tolerance, fraction, feedback=''}], defaultmark=1.0 | `questionid`, `slot` | see above |
 | `add_matching_question` | quizcmid, name, questiontext, pairs=[{question, answer}] (>=2), shuffleanswers=1, defaultmark=1.0 | `questionid`, `slot` | see above |
 
+Book chapters: Moodle has no chapter-creation API (core's own `mod/book/edit.php` inserts
+into `book_chapters` directly), so `create_book` does the same and fires the core
+`chapter_created` event. This is the one deliberate raw write; everything else goes through
+Moodle APIs.
+
 ## Backup / restore
 
 | Function | Params (default) | Returns | Capability |
@@ -106,7 +111,7 @@ Assign at system level (or a course-creator category) a custom role "MCP builder
 - `moodle/course:update`, `moodle/course:manageactivities`, `moodle/course:activityvisibility`, `moodle/course:sectionvisibility`
 - `mod/page:addinstance`, `mod/label:addinstance`, `mod/url:addinstance`, `mod/quiz:addinstance`, `mod/book:addinstance`, `mod/forum:addinstance`, `mod/choice:addinstance`, `mod/assign:addinstance`
 - `mod/book:edit`, `mod/quiz:manage`, `moodle/question:add`
-- `moodle/course:view`, `moodle/course:viewhiddenactivities`, `moodle/course:viewhiddensections`, and `mod/<type>:view` for each type above (found in testing: without `mod/quiz:view` the quiz counts as inaccessible and every quiz call fails with "Course or activity not accessible")
+- `moodle/course:view`, `moodle/course:viewhiddenactivities`, `moodle/course:viewhiddensections`, and the view capability of each type above (`mod/<type>:view`, but `mod/book:read`, `mod/forum:viewdiscussion`, `mod/choice:choose`) (found in testing: without `mod/quiz:view` the quiz counts as inaccessible and every quiz call fails with "Course or activity not accessible")
 - plus `webservice/rest:use`, and the user added to the "Full MCP Service" authorised users.
 
 Explicitly NOT granted: `moodle/site:config`, user management, `moodle/backup:userinfo`
