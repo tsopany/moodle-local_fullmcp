@@ -106,6 +106,7 @@ Assign at system level (or a course-creator category) a custom role "MCP builder
 - `moodle/course:update`, `moodle/course:manageactivities`, `moodle/course:activityvisibility`, `moodle/course:sectionvisibility`
 - `mod/page:addinstance`, `mod/label:addinstance`, `mod/url:addinstance`, `mod/quiz:addinstance`, `mod/book:addinstance`, `mod/forum:addinstance`, `mod/choice:addinstance`, `mod/assign:addinstance`
 - `mod/book:edit`, `mod/quiz:manage`, `moodle/question:add`
+- `moodle/course:view`, `moodle/course:viewhiddenactivities`, `moodle/course:viewhiddensections`, and `mod/<type>:view` for each type above (found in testing: without `mod/quiz:view` the quiz counts as inaccessible and every quiz call fails with "Course or activity not accessible")
 - plus `webservice/rest:use`, and the user added to the "Full MCP Service" authorised users.
 
 Explicitly NOT granted: `moodle/site:config`, user management, `moodle/backup:userinfo`

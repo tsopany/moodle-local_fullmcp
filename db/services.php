@@ -95,6 +95,55 @@ $functions = [
         'ajax' => true,
         'capabilities' => 'moodle/course:manageactivities',
     ],
+    'local_fullmcp_create_quiz' => [
+        'classname' => 'local_fullmcp\\external\\create_quiz',
+        'description' => 'Create a Quiz activity.',
+        'type' => 'write',
+        'ajax' => true,
+        'capabilities' => 'moodle/course:manageactivities, mod/quiz:addinstance',
+    ],
+    'local_fullmcp_add_quiz_question' => [
+        'classname' => 'local_fullmcp\\external\\add_quiz_question',
+        'description' => 'Add a multiple choice question to a quiz.',
+        'type' => 'write',
+        'ajax' => true,
+        'capabilities' => 'mod/quiz:manage, moodle/question:add',
+    ],
+    'local_fullmcp_add_truefalse_question' => [
+        'classname' => 'local_fullmcp\\external\\add_truefalse_question',
+        'description' => 'Add a true/false question to a quiz.',
+        'type' => 'write',
+        'ajax' => true,
+        'capabilities' => 'mod/quiz:manage, moodle/question:add',
+    ],
+    'local_fullmcp_add_shortanswer_question' => [
+        'classname' => 'local_fullmcp\\external\\add_shortanswer_question',
+        'description' => 'Add a short answer question to a quiz.',
+        'type' => 'write',
+        'ajax' => true,
+        'capabilities' => 'mod/quiz:manage, moodle/question:add',
+    ],
+    'local_fullmcp_add_essay_question' => [
+        'classname' => 'local_fullmcp\\external\\add_essay_question',
+        'description' => 'Add an essay question to a quiz.',
+        'type' => 'write',
+        'ajax' => true,
+        'capabilities' => 'mod/quiz:manage, moodle/question:add',
+    ],
+    'local_fullmcp_add_numerical_question' => [
+        'classname' => 'local_fullmcp\\external\\add_numerical_question',
+        'description' => 'Add a numerical question to a quiz.',
+        'type' => 'write',
+        'ajax' => true,
+        'capabilities' => 'mod/quiz:manage, moodle/question:add',
+    ],
+    'local_fullmcp_add_matching_question' => [
+        'classname' => 'local_fullmcp\\external\\add_matching_question',
+        'description' => 'Add a matching question to a quiz.',
+        'type' => 'write',
+        'ajax' => true,
+        'capabilities' => 'mod/quiz:manage, moodle/question:add',
+    ],
 ];
 
 $services = [
