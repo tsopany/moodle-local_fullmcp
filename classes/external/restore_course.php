@@ -22,7 +22,6 @@ use core_external\external_single_structure;
 use core_external\external_value;
 use local_fullmcp\helper;
 
-
 /**
  * Restore a .mbz (base64) into a new course.
  *
@@ -54,12 +53,20 @@ class restore_course extends external_api {
      * @param string $shortname
      * @return array
      */
-    public static function execute(string $content_base64, int $categoryid, string $fullname, string $shortname): array {
+    public static function execute(
+        // phpcs:ignore moodle.NamingConventions.ValidVariableName.VariableNameUnderscore
+        string $content_base64,
+        int $categoryid,
+        string $fullname,
+        string $shortname
+    ): array {
         global $CFG, $DB, $USER;
         require_once($CFG->dirroot . '/backup/util/includes/restore_includes.php');
         require_once($CFG->libdir . '/filestorage/zip_packer.php');
-        $params = self::validate_parameters(self::execute_parameters(),
-            compact('content_base64', 'categoryid', 'fullname', 'shortname'));
+        $params = self::validate_parameters(
+            self::execute_parameters(),
+            compact('content_base64', 'categoryid', 'fullname', 'shortname')
+        );
         $category = \core_course_category::get($params['categoryid']);
         $context = $category->get_context();
         self::validate_context($context);
@@ -88,8 +95,10 @@ class restore_course extends external_api {
                 throw new \core\exception\invalid_parameter_exception('Not a valid Moodle backup file');
             }
             $info = \backup_general_helper::get_backup_information($backupid);
-            if ($info->type !== \backup::TYPE_1COURSE
-                    || \backup_general_helper::detect_backup_format($backupid) !== \backup::FORMAT_MOODLE) {
+            if (
+                $info->type !== \backup::TYPE_1COURSE
+                    || \backup_general_helper::detect_backup_format($backupid) !== \backup::FORMAT_MOODLE
+            ) {
                 throw new \core\exception\invalid_parameter_exception('Only Moodle course backups can be restored');
             }
 
@@ -100,8 +109,14 @@ class restore_course extends external_api {
             }
 
             $courseid = \restore_dbops::create_new_course($fullname, $shortname, $category->id);
-            $rc = new \restore_controller($backupid, $courseid, \backup::INTERACTIVE_NO, \backup::MODE_GENERAL,
-                $USER->id, \backup::TARGET_NEW_COURSE);
+            $rc = new \restore_controller(
+                $backupid,
+                $courseid,
+                \backup::INTERACTIVE_NO,
+                \backup::MODE_GENERAL,
+                $USER->id,
+                \backup::TARGET_NEW_COURSE
+            );
             $plan = $rc->get_plan();
             foreach (['course_fullname' => $fullname, 'course_shortname' => $shortname] as $setting => $value) {
                 $setting = $plan->get_setting($setting);

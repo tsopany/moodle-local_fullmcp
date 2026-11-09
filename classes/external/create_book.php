@@ -22,7 +22,6 @@ use core_external\external_single_structure;
 use core_external\external_value;
 use local_fullmcp\helper;
 
-
 /**
  * Create a Book activity with its first chapter.
  *
@@ -60,11 +59,21 @@ class create_book extends external_api {
      * @param int $visible
      * @return array
      */
-    public static function execute(int $courseid, int $section, string $name, string $intro, string $chaptertitle, string $chaptercontent, int $visible): array {
+    public static function execute(
+        int $courseid,
+        int $section,
+        string $name,
+        string $intro,
+        string $chaptertitle,
+        string $chaptercontent,
+        int $visible
+    ): array {
         global $CFG, $DB;
         require_once($CFG->dirroot . '/mod/book/locallib.php');
-        $params = self::validate_parameters(self::execute_parameters(),
-            compact('courseid', 'section', 'name', 'intro', 'chaptertitle', 'chaptercontent', 'visible'));
+        $params = self::validate_parameters(
+            self::execute_parameters(),
+            compact('courseid', 'section', 'name', 'intro', 'chaptertitle', 'chaptercontent', 'visible')
+        );
         if (trim($params['chaptertitle']) === '') {
             throw new \core\exception\invalid_parameter_exception('chaptertitle must not be empty');
         }

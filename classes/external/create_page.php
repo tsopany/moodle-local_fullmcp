@@ -22,7 +22,6 @@ use core_external\external_single_structure;
 use core_external\external_value;
 use local_fullmcp\helper;
 
-
 /**
  * Create a Page activity.
  *
@@ -61,8 +60,10 @@ class create_page extends external_api {
     public static function execute(int $courseid, int $section, string $name, string $content, string $intro, int $visible): array {
         global $CFG;
         require_once($CFG->libdir . '/resourcelib.php');
-        $params = self::validate_parameters(self::execute_parameters(),
-            compact('courseid', 'section', 'name', 'content', 'intro', 'visible'));
+        $params = self::validate_parameters(
+            self::execute_parameters(),
+            compact('courseid', 'section', 'name', 'content', 'intro', 'visible')
+        );
         return helper::add_module('page', $params['courseid'], $params['section'], $params['visible'] ? 1 : 0, [
             'name' => $params['name'],
             'intro' => $params['intro'],

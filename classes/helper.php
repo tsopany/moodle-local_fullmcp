@@ -18,7 +18,6 @@ namespace local_fullmcp;
 
 use core_external\external_api;
 
-
 /**
  * Shared helpers for the Full MCP web service functions.
  *

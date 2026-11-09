@@ -22,7 +22,6 @@ use core_external\external_single_structure;
 use core_external\external_value;
 use local_fullmcp\helper;
 
-
 /**
  * Back a course up and return the .mbz as base64 (refused above 100 MB).
  *
@@ -61,8 +60,14 @@ class backup_course extends external_api {
         $maxbytes = 100 * 1024 * 1024;
         raise_memory_limit(MEMORY_HUGE);
 
-        $bc = new \backup_controller(\backup::TYPE_1COURSE, $course->id, \backup::FORMAT_MOODLE,
-            \backup::INTERACTIVE_NO, \backup::MODE_GENERAL, $USER->id);
+        $bc = new \backup_controller(
+            \backup::TYPE_1COURSE,
+            $course->id,
+            \backup::FORMAT_MOODLE,
+            \backup::INTERACTIVE_NO,
+            \backup::MODE_GENERAL,
+            $USER->id
+        );
         try {
             $plan = $bc->get_plan();
             // Without moodle/backup:userinfo Moodle locks this setting to "no users" itself.

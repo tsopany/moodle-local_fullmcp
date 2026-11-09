@@ -18,7 +18,6 @@ namespace local_fullmcp;
 
 use core_question\local\bank\question_version_status;
 
-
 /**
  * Creates question bank questions and adds them to a quiz.
  *
@@ -41,8 +40,14 @@ class question_helper {
      * @param array $fields Type-specific form fields, merged over the common ones.
      * @return array [questionid, slot]
      */
-    public static function add(string $qtype, int $quizcmid, string $name, string $questiontext,
-            float $defaultmark, array $fields): array {
+    public static function add(
+        string $qtype,
+        int $quizcmid,
+        string $name,
+        string $questiontext,
+        float $defaultmark,
+        array $fields
+    ): array {
         global $CFG, $DB, $USER;
         require_once($CFG->dirroot . '/mod/quiz/locallib.php');
         require_once($CFG->libdir . '/questionlib.php');

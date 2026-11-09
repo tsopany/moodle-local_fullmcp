@@ -59,16 +59,12 @@ jobs:
         if: ${{ !cancelled() }}
         run: moodle-plugin-ci phplint
 
-      # The code-style checks below do not fail the build yet: they have not been run on this code.
-      # Remove continue-on-error once they pass.
       - name: Moodle Code Checker
         if: ${{ !cancelled() }}
-        continue-on-error: true
         run: moodle-plugin-ci phpcs --max-warnings 0
 
       - name: Moodle PHPDoc Checker
         if: ${{ !cancelled() }}
-        continue-on-error: true
         run: moodle-plugin-ci phpdoc --max-warnings 0
 
       - name: Validating

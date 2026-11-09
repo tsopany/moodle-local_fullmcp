@@ -22,7 +22,6 @@ use core_external\external_single_structure;
 use core_external\external_value;
 use local_fullmcp\helper;
 
-
 /**
  * Create an Assignment activity with online text and file submissions.
  *
@@ -60,9 +59,19 @@ class create_assignment extends external_api {
      * @param int $visible
      * @return array
      */
-    public static function execute(int $courseid, int $section, string $name, string $intro, int $duedate, int $grade, int $visible): array {
-        $params = self::validate_parameters(self::execute_parameters(),
-            compact('courseid', 'section', 'name', 'intro', 'duedate', 'grade', 'visible'));
+    public static function execute(
+        int $courseid,
+        int $section,
+        string $name,
+        string $intro,
+        int $duedate,
+        int $grade,
+        int $visible
+    ): array {
+        $params = self::validate_parameters(
+            self::execute_parameters(),
+            compact('courseid', 'section', 'name', 'intro', 'duedate', 'grade', 'visible')
+        );
         if ($params['duedate'] < 0 || $params['grade'] < 0) {
             throw new \core\exception\invalid_parameter_exception('duedate and grade must not be negative');
         }

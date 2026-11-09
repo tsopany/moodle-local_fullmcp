@@ -22,7 +22,6 @@ use core_external\external_single_structure;
 use core_external\external_value;
 use local_fullmcp\helper;
 
-
 /**
  * Create a Label (inline text).
  *
@@ -57,8 +56,10 @@ class create_label extends external_api {
      * @return array
      */
     public static function execute(int $courseid, int $section, string $content, string $name, int $visible): array {
-        $params = self::validate_parameters(self::execute_parameters(),
-            compact('courseid', 'section', 'content', 'name', 'visible'));
+        $params = self::validate_parameters(
+            self::execute_parameters(),
+            compact('courseid', 'section', 'content', 'name', 'visible')
+        );
         return helper::add_module('label', $params['courseid'], $params['section'], $params['visible'] ? 1 : 0, [
             'name' => $params['name'],
             'intro' => $params['content'],

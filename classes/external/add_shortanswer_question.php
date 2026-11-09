@@ -21,7 +21,6 @@ use core_external\external_function_parameters;
 use core_external\external_single_structure;
 use core_external\external_value;
 use local_fullmcp\helper;
-
 use core_external\external_multiple_structure;
 use local_fullmcp\question_helper;
 
@@ -60,9 +59,18 @@ class add_shortanswer_question extends external_api {
      * @param float $defaultmark
      * @return array
      */
-    public static function execute(int $quizcmid, string $name, string $questiontext, array $answers, int $usecase, float $defaultmark): array {
-        $params = self::validate_parameters(self::execute_parameters(),
-            compact('quizcmid', 'name', 'questiontext', 'answers', 'usecase', 'defaultmark'));
+    public static function execute(
+        int $quizcmid,
+        string $name,
+        string $questiontext,
+        array $answers,
+        int $usecase,
+        float $defaultmark
+    ): array {
+        $params = self::validate_parameters(
+            self::execute_parameters(),
+            compact('quizcmid', 'name', 'questiontext', 'answers', 'usecase', 'defaultmark')
+        );
         $answers = array_values(array_filter($params['answers'], fn($a) => trim($a) !== ''));
         if (!$answers) {
             throw new \core\exception\invalid_parameter_exception('At least one answer is required');
@@ -72,8 +80,14 @@ class add_shortanswer_question extends external_api {
             $fields['fraction'][$i] = '1.0';
             $fields['feedback'][$i] = ['text' => '', 'format' => FORMAT_HTML, 'itemid' => 0];
         }
-        return question_helper::add('shortanswer', $params['quizcmid'], $params['name'], $params['questiontext'],
-            $params['defaultmark'], $fields);
+        return question_helper::add(
+            'shortanswer',
+            $params['quizcmid'],
+            $params['name'],
+            $params['questiontext'],
+            $params['defaultmark'],
+            $fields
+        );
     }
 
     /**

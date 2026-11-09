@@ -28,4 +28,4 @@ $plugin->component = 'local_fullmcp';
 $plugin->version = 2026110805;
 $plugin->requires = 2026100500; // Moodle 5.3.
 $plugin->maturity = MATURITY_ALPHA;
-$plugin->release = '0.1.0';
+$plugin->release = '0.1.2';

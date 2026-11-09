@@ -26,7 +26,7 @@ The throwaway dev site in `dev/` can be used for this (`composer install` plus `
 ## Backup and restore size
 
 `backup_course` and `restore_course` move the .mbz as base64 inside the request (max 100 MB).
-Set nginx `client_max_body_size` and PHP `post_max_size` to at least 140M and `memory_limit` to 512M or more.
+Set nginx `client_max_body_size` and PHP `post_max_size` to at least 140M and `memory_limit` to 512M or more. The `erseco/alpine-moodle` image takes these as environment variables `client_max_body_size`, `post_max_size` and `memory_limit`.
 
 ## License
 

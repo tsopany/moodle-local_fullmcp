@@ -21,7 +21,6 @@ use core_external\external_function_parameters;
 use core_external\external_single_structure;
 use core_external\external_value;
 use local_fullmcp\helper;
-
 use core_courseformat\formatactions;
 
 /**
@@ -58,8 +57,10 @@ class update_section extends external_api {
      * @return array
      */
     public static function execute(int $courseid, int $sectionnum, string $name, string $summary, int $visible): array {
-        $params = self::validate_parameters(self::execute_parameters(),
-            compact('courseid', 'sectionnum', 'name', 'summary', 'visible'));
+        $params = self::validate_parameters(
+            self::execute_parameters(),
+            compact('courseid', 'sectionnum', 'name', 'summary', 'visible')
+        );
         [$course, $context] = helper::course_require($params['courseid'], 'moodle/course:update');
         $section = helper::section($course, $params['sectionnum']);
         $fields = [];

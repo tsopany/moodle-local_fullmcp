@@ -19,7 +19,7 @@ namespace local_fullmcp;
 use core\exception\invalid_parameter_exception;
 use core\exception\required_capability_exception;
 use core_external\external_api;
-use PHPUnit\Framework\Attributes\CoversNamespace;
+use PHPUnit\Framework\Attributes\CoversNothing;
 use local_fullmcp\external\add_truefalse_question;
 use local_fullmcp\external\backup_course;
 use local_fullmcp\external\create_page;
@@ -33,7 +33,7 @@ use local_fullmcp\external\restore_course;
  * @copyright  2026 Tsopany
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-#[CoversNamespace('local_fullmcp')]
+#[CoversNothing]
 final class backup_restore_test extends \advanced_testcase {
     /**
      * Course holding a page and a quiz with one question; admin logged in.
@@ -60,20 +60,27 @@ final class backup_restore_test extends \advanced_testcase {
         $this->assertNotFalse($binary);
         $this->assertEquals($backup['size'], strlen($binary));
 
-        $restored = external_api::clean_returnvalue(restore_course::execute_returns(),
-            restore_course::execute($backup['content_base64'], 1, 'Restored', 'copy'));
+        $restored = external_api::clean_returnvalue(
+            restore_course::execute_returns(),
+            restore_course::execute($backup['content_base64'], 1, 'Restored', 'copy')
+        );
         $this->assertNotEquals($course->id, $restored['courseid']);
         $this->assertEquals('Restored', $restored['fullname']);
         $this->assertEquals('copy', $restored['shortname']);
 
-        $names = fn(int $courseid) => array_values(array_map(fn($cm) => $cm->name,
-            get_fast_modinfo($courseid)->get_cms()));
+        $names = fn(int $courseid) => array_values(array_map(
+            fn($cm) => $cm->name,
+            get_fast_modinfo($courseid)->get_cms()
+        ));
         $this->assertEqualsCanonicalizing($names($course->id), $names($restored['courseid']));
         $quiz = $DB->get_record('quiz', ['course' => $restored['courseid']], '*', MUST_EXIST);
         $this->assertEquals(1, $DB->count_records('quiz_slots', ['quizid' => $quiz->id]));
         $this->assertEquals(1.0, (float) $quiz->sumgrades);
-        $this->assertEquals(0, $DB->count_records_select('backup_controllers', 'status < ?', [\backup::STATUS_FINISHED_ERR]),
-            'No unfinished controllers are left behind');
+        $this->assertEquals(
+            0,
+            $DB->count_records_select('backup_controllers', 'status < ?', [\backup::STATUS_FINISHED_ERR]),
+            'No unfinished controllers are left behind'
+        );
     }
 
     public function test_restore_with_existing_shortname_creates_nothing(): void {

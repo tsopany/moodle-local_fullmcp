@@ -19,7 +19,7 @@ namespace local_fullmcp;
 use core\exception\invalid_parameter_exception;
 use core\exception\required_capability_exception;
 use core_external\external_api;
-use PHPUnit\Framework\Attributes\CoversNamespace;
+use PHPUnit\Framework\Attributes\CoversNothing;
 use local_fullmcp\external\create_assignment;
 use local_fullmcp\external\create_book;
 use local_fullmcp\external\create_choice;
@@ -40,7 +40,7 @@ use local_fullmcp\external\update_page;
  * @copyright  2026 Tsopany
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-#[CoversNamespace('local_fullmcp')]
+#[CoversNothing]
 final class activities_test extends \advanced_testcase {
     /**
      * Course with admin logged in.
@@ -71,8 +71,10 @@ final class activities_test extends \advanced_testcase {
     public function test_create_page_label_url(): void {
         global $DB;
         $course = $this->course();
-        $page = external_api::clean_returnvalue(create_page::execute_returns(),
-            create_page::execute($course->id, 1, 'My page', '<p>Body</p>', '<p>Intro</p>', 1));
+        $page = external_api::clean_returnvalue(
+            create_page::execute_returns(),
+            create_page::execute($course->id, 1, 'My page', '<p>Body</p>', '<p>Intro</p>', 1)
+        );
         $cm = $this->assert_cm($page, 'page', 1);
         $this->assertEquals('My page', $cm->name);
         $this->assertEquals('<p>Body</p>', $DB->get_field('page', 'content', ['id' => $page['instanceid']]));
@@ -102,8 +104,10 @@ final class activities_test extends \advanced_testcase {
         global $DB;
         $course = $this->course();
 
-        $book = external_api::clean_returnvalue(create_book::execute_returns(),
-            create_book::execute($course->id, 0, 'Book', '', 'Chapter 1', '<p>First</p>', 1));
+        $book = external_api::clean_returnvalue(
+            create_book::execute_returns(),
+            create_book::execute($course->id, 0, 'Book', '', 'Chapter 1', '<p>First</p>', 1)
+        );
         $this->assert_cm($book, 'book');
         $chapter = $DB->get_record('book_chapters', ['id' => $book['chapterid']], '*', MUST_EXIST);
         $this->assertEquals($book['instanceid'], $chapter->bookid);
@@ -115,25 +119,32 @@ final class activities_test extends \advanced_testcase {
 
         $choice = create_choice::execute($course->id, 0, 'Poll', '<p>Colour?</p>', ['Red', 'Blue', ' '], 1, 1);
         $this->assert_cm($choice, 'choice');
-        $this->assertEquals(['Red', 'Blue'],
-            array_values($DB->get_records_menu('choice_options', ['choiceid' => $choice['instanceid']], 'id', 'id, text')));
+        $this->assertEquals(
+            ['Red', 'Blue'],
+            array_values($DB->get_records_menu('choice_options', ['choiceid' => $choice['instanceid']], 'id', 'id, text'))
+        );
 
         $assign = create_assignment::execute($course->id, 0, 'Essay', '', 1900000000, 50, 1);
         $this->assert_cm($assign, 'assign');
         $record = $DB->get_record('assign', ['id' => $assign['instanceid']], '*', MUST_EXIST);
         $this->assertEquals(1900000000, $record->duedate);
         $this->assertEquals(50, $record->grade);
-        $this->assertEquals(1, $DB->get_field('assign_plugin_config', 'value',
-            ['assignment' => $record->id, 'plugin' => 'onlinetext', 'subtype' => 'assignsubmission', 'name' => 'enabled']));
+        $this->assertEquals(1, $DB->get_field(
+            'assign_plugin_config',
+            'value',
+            ['assignment' => $record->id, 'plugin' => 'onlinetext', 'subtype' => 'assignsubmission', 'name' => 'enabled']
+        ));
     }
 
     public function test_invalid_forum_choice_and_book_are_rejected(): void {
         $course = $this->course();
-        foreach ([
+        foreach (
+            [
             fn() => create_forum::execute($course->id, 0, 'F', '', 'bogus', 1),
             fn() => create_choice::execute($course->id, 0, 'C', 'q', ['Only one'], 1, 1),
             fn() => create_book::execute($course->id, 0, 'B', '', ' ', 'x', 1),
-        ] as $call) {
+            ] as $call
+        ) {
             try {
                 $call();
                 $this->fail('Expected invalid_parameter_exception');
@@ -149,8 +160,10 @@ final class activities_test extends \advanced_testcase {
         $page = create_page::execute($course->id, 0, 'Old', 'x', '', 1);
         $section = create_section::execute($course->id, 'Target', '', 0);
 
-        $updated = external_api::clean_returnvalue(update_activity::execute_returns(),
-            update_activity::execute($page['cmid'], 'New name', 0));
+        $updated = external_api::clean_returnvalue(
+            update_activity::execute_returns(),
+            update_activity::execute($page['cmid'], 'New name', 0)
+        );
         $this->assertEquals('New name', $updated['name']);
         $this->assertEquals(0, $updated['visible']);
         $unchanged = update_activity::execute($page['cmid'], '', -1);
@@ -182,11 +195,13 @@ final class activities_test extends \advanced_testcase {
         $page = create_page::execute($course->id, 0, 'P', 'x', '', 1);
         $student = $this->getDataGenerator()->create_and_enrol($course, 'student');
         $this->setUser($student);
-        foreach ([
+        foreach (
+            [
             fn() => create_page::execute($course->id, 0, 'Nope', 'x', '', 1),
             fn() => update_activity::execute($page['cmid'], 'Nope', -1),
             fn() => delete_activity::execute($page['cmid']),
-        ] as $call) {
+            ] as $call
+        ) {
             try {
                 $call();
                 $this->fail('Expected required_capability_exception');

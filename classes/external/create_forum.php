@@ -22,7 +22,6 @@ use core_external\external_single_structure;
 use core_external\external_value;
 use local_fullmcp\helper;
 
-
 /**
  * Create a Forum activity.
  *
@@ -61,8 +60,10 @@ class create_forum extends external_api {
     public static function execute(int $courseid, int $section, string $name, string $intro, string $type, int $visible): array {
         global $CFG;
         require_once($CFG->dirroot . '/mod/forum/lib.php');
-        $params = self::validate_parameters(self::execute_parameters(),
-            compact('courseid', 'section', 'name', 'intro', 'type', 'visible'));
+        $params = self::validate_parameters(
+            self::execute_parameters(),
+            compact('courseid', 'section', 'name', 'intro', 'type', 'visible')
+        );
         if (!array_key_exists($params['type'], forum_get_forum_types())) {
             throw new \core\exception\invalid_parameter_exception('Invalid forum type');
         }

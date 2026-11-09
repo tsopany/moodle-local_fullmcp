@@ -22,7 +22,6 @@ use core_external\external_single_structure;
 use core_external\external_value;
 use local_fullmcp\helper;
 
-
 /**
  * Create a URL resource.
  *
@@ -60,11 +59,21 @@ class create_url extends external_api {
      * @param int $visible
      * @return array
      */
-    public static function execute(int $courseid, int $section, string $name, string $externalurl, string $intro, int $display, int $visible): array {
+    public static function execute(
+        int $courseid,
+        int $section,
+        string $name,
+        string $externalurl,
+        string $intro,
+        int $display,
+        int $visible
+    ): array {
         global $CFG;
         require_once($CFG->libdir . '/resourcelib.php');
-        $params = self::validate_parameters(self::execute_parameters(),
-            compact('courseid', 'section', 'name', 'externalurl', 'intro', 'display', 'visible'));
+        $params = self::validate_parameters(
+            self::execute_parameters(),
+            compact('courseid', 'section', 'name', 'externalurl', 'intro', 'display', 'visible')
+        );
         $url = clean_param($params['externalurl'], PARAM_URL);
         if ($url === '') {
             throw new \core\exception\invalid_parameter_exception('Invalid externalurl');

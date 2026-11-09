@@ -19,7 +19,7 @@ namespace local_fullmcp;
 use core\exception\invalid_parameter_exception;
 use core\exception\required_capability_exception;
 use core_external\external_api;
-use PHPUnit\Framework\Attributes\CoversNamespace;
+use PHPUnit\Framework\Attributes\CoversNothing;
 use local_fullmcp\external\create_section;
 use local_fullmcp\external\delete_section;
 use local_fullmcp\external\update_section;
@@ -31,7 +31,7 @@ use local_fullmcp\external\update_section;
  * @copyright  2026 Tsopany
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-#[CoversNamespace('local_fullmcp')]
+#[CoversNothing]
 final class sections_test extends \advanced_testcase {
     public function test_create_update_delete(): void {
         global $DB;
@@ -40,22 +40,28 @@ final class sections_test extends \advanced_testcase {
         $course = $this->getDataGenerator()->create_course();
         $existing = count(get_fast_modinfo($course)->get_section_info_all());
 
-        $created = external_api::clean_returnvalue(create_section::execute_returns(),
-            create_section::execute($course->id, 'Week A', '<p>Summary</p>', 0));
+        $created = external_api::clean_returnvalue(
+            create_section::execute_returns(),
+            create_section::execute($course->id, 'Week A', '<p>Summary</p>', 0)
+        );
         $this->assertEquals($existing, $created['sectionnum']);
         $record = $DB->get_record('course_sections', ['id' => $created['sectionid']], '*', MUST_EXIST);
         $this->assertEquals('Week A', $record->name);
         $this->assertEquals('<p>Summary</p>', $record->summary);
 
-        external_api::clean_returnvalue(update_section::execute_returns(),
-            update_section::execute($course->id, $created['sectionnum'], 'Renamed', '', 0));
+        external_api::clean_returnvalue(
+            update_section::execute_returns(),
+            update_section::execute($course->id, $created['sectionnum'], 'Renamed', '', 0)
+        );
         $record = $DB->get_record('course_sections', ['id' => $created['sectionid']], '*', MUST_EXIST);
         $this->assertEquals('Renamed', $record->name);
         $this->assertEquals('<p>Summary</p>', $record->summary, 'Empty summary keeps the old one');
         $this->assertEquals(0, $record->visible);
 
-        $deleted = external_api::clean_returnvalue(delete_section::execute_returns(),
-            delete_section::execute($course->id, $created['sectionnum']));
+        $deleted = external_api::clean_returnvalue(
+            delete_section::execute_returns(),
+            delete_section::execute($course->id, $created['sectionnum'])
+        );
         $this->assertTrue($deleted['success']);
         $this->assertFalse($DB->record_exists('course_sections', ['id' => $created['sectionid']]));
     }

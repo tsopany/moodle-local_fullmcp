@@ -21,7 +21,6 @@ use core_external\external_function_parameters;
 use core_external\external_single_structure;
 use core_external\external_value;
 use local_fullmcp\helper;
-
 use core_external\external_multiple_structure;
 use local_fullmcp\question_helper;
 
@@ -64,9 +63,26 @@ class add_essay_question extends external_api {
      * @param float $defaultmark
      * @return array
      */
-    public static function execute(int $quizcmid, string $name, string $questiontext, string $graderinfo, string $responsetemplate, int $responselines, int $attachments, float $defaultmark): array {
+    public static function execute(
+        int $quizcmid,
+        string $name,
+        string $questiontext,
+        string $graderinfo,
+        string $responsetemplate,
+        int $responselines,
+        int $attachments,
+        float $defaultmark
+    ): array {
         $params = self::validate_parameters(self::execute_parameters(), compact(
-            'quizcmid', 'name', 'questiontext', 'graderinfo', 'responsetemplate', 'responselines', 'attachments', 'defaultmark'));
+            'quizcmid',
+            'name',
+            'questiontext',
+            'graderinfo',
+            'responsetemplate',
+            'responselines',
+            'attachments',
+            'defaultmark'
+        ));
         $context = \context_module::instance($params['quizcmid']);
         if (!in_array($params['attachments'], [-1, 0, 1, 2, 3])) {
             throw new \core\exception\invalid_parameter_exception('attachments must be -1, 0, 1, 2 or 3');
@@ -83,8 +99,14 @@ class add_essay_question extends external_api {
             'responsetemplate' => question_helper::text($context, $params['responsetemplate']),
             'penalty' => 0,
         ];
-        return question_helper::add('essay', $params['quizcmid'], $params['name'], $params['questiontext'],
-            $params['defaultmark'], $fields);
+        return question_helper::add(
+            'essay',
+            $params['quizcmid'],
+            $params['name'],
+            $params['questiontext'],
+            $params['defaultmark'],
+            $fields
+        );
     }
 
     /**

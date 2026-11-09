@@ -21,7 +21,6 @@ use core_external\external_function_parameters;
 use core_external\external_single_structure;
 use core_external\external_value;
 use local_fullmcp\helper;
-
 use core_external\external_multiple_structure;
 use local_fullmcp\question_helper;
 
@@ -63,9 +62,18 @@ class add_matching_question extends external_api {
      * @param float $defaultmark
      * @return array
      */
-    public static function execute(int $quizcmid, string $name, string $questiontext, array $pairs, int $shuffleanswers, float $defaultmark): array {
-        $params = self::validate_parameters(self::execute_parameters(),
-            compact('quizcmid', 'name', 'questiontext', 'pairs', 'shuffleanswers', 'defaultmark'));
+    public static function execute(
+        int $quizcmid,
+        string $name,
+        string $questiontext,
+        array $pairs,
+        int $shuffleanswers,
+        float $defaultmark
+    ): array {
+        $params = self::validate_parameters(
+            self::execute_parameters(),
+            compact('quizcmid', 'name', 'questiontext', 'pairs', 'shuffleanswers', 'defaultmark')
+        );
         $context = \context_module::instance($params['quizcmid']);
         $pairs = array_values(array_filter($params['pairs'], fn($p) => trim($p['question']) !== '' && trim($p['answer']) !== ''));
         if (count($pairs) < 2) {
@@ -75,7 +83,10 @@ class add_matching_question extends external_api {
             'shuffleanswers' => $params['shuffleanswers'] ? 1 : 0,
             'noanswers' => count($pairs),
             'correctfeedback' => question_helper::text($context, get_string('correctfeedbackdefault', 'question')),
-            'partiallycorrectfeedback' => question_helper::text($context, get_string('partiallycorrectfeedbackdefault', 'question')),
+            'partiallycorrectfeedback' => question_helper::text(
+                $context,
+                get_string('partiallycorrectfeedbackdefault', 'question'),
+            ),
             'incorrectfeedback' => question_helper::text($context, get_string('incorrectfeedbackdefault', 'question')),
             'shownumcorrect' => 1,
             'subquestions' => [], 'subanswers' => [],
@@ -84,8 +95,14 @@ class add_matching_question extends external_api {
             $fields['subquestions'][$i] = question_helper::text($context, $p['question']);
             $fields['subanswers'][$i] = clean_param($p['answer'], PARAM_TEXT);
         }
-        return question_helper::add('match', $params['quizcmid'], $params['name'], $params['questiontext'],
-            $params['defaultmark'], $fields);
+        return question_helper::add(
+            'match',
+            $params['quizcmid'],
+            $params['name'],
+            $params['questiontext'],
+            $params['defaultmark'],
+            $fields
+        );
     }
 
     /**

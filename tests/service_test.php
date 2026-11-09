@@ -16,7 +16,7 @@
 
 namespace local_fullmcp;
 
-use PHPUnit\Framework\Attributes\CoversNamespace;
+use PHPUnit\Framework\Attributes\CoversNothing;
 
 /**
  * Tests for the service definition.
@@ -25,7 +25,7 @@ use PHPUnit\Framework\Attributes\CoversNamespace;
  * @copyright  2026 Tsopany
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-#[CoversNamespace('local_fullmcp')]
+#[CoversNothing]
 final class service_test extends \advanced_testcase {
     /**
      * The function names of the Full MCP Service, as declared in db/services.php.
@@ -46,8 +46,10 @@ final class service_test extends \advanced_testcase {
         $names = $this->service_functions();
         $this->assertNotEmpty($names);
         foreach ($names as $name) {
-            $this->assertNotFalse(\core_external\external_api::external_function_info($name, IGNORE_MISSING),
-                "$name is not a registered web service function");
+            $this->assertNotFalse(
+                \core_external\external_api::external_function_info($name, IGNORE_MISSING),
+                "$name is not a registered web service function"
+            );
         }
     }
 
@@ -80,7 +82,9 @@ final class service_test extends \advanced_testcase {
         $functions = [];
         $services = [];
         require($CFG->dirroot . '/local/fullmcp/db/services.php');
-        $this->assertEqualsCanonicalizing(array_keys($functions),
-            array_filter($services['Full MCP Service']['functions'], fn($n) => str_starts_with($n, 'local_fullmcp_')));
+        $this->assertEqualsCanonicalizing(
+            array_keys($functions),
+            array_filter($services['Full MCP Service']['functions'], fn($n) => str_starts_with($n, 'local_fullmcp_'))
+        );
     }
 }

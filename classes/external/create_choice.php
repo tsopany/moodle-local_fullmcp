@@ -21,7 +21,6 @@ use core_external\external_function_parameters;
 use core_external\external_single_structure;
 use core_external\external_value;
 use local_fullmcp\helper;
-
 use core_external\external_multiple_structure;
 
 /**
@@ -61,9 +60,19 @@ class create_choice extends external_api {
      * @param int $visible
      * @return array
      */
-    public static function execute(int $courseid, int $section, string $name, string $question, array $options, int $allowupdate, int $visible): array {
-        $params = self::validate_parameters(self::execute_parameters(),
-            compact('courseid', 'section', 'name', 'question', 'options', 'allowupdate', 'visible'));
+    public static function execute(
+        int $courseid,
+        int $section,
+        string $name,
+        string $question,
+        array $options,
+        int $allowupdate,
+        int $visible
+    ): array {
+        $params = self::validate_parameters(
+            self::execute_parameters(),
+            compact('courseid', 'section', 'name', 'question', 'options', 'allowupdate', 'visible')
+        );
         $options = array_values(array_filter(array_map('trim', $params['options']), fn($o) => $o !== ''));
         if (count($options) < 2) {
             throw new \core\exception\invalid_parameter_exception('At least two options are required');

@@ -21,7 +21,6 @@ use core_external\external_function_parameters;
 use core_external\external_single_structure;
 use core_external\external_value;
 use local_fullmcp\helper;
-
 use core_external\external_multiple_structure;
 use local_fullmcp\question_helper;
 
@@ -58,17 +57,31 @@ class add_truefalse_question extends external_api {
      * @param float $defaultmark
      * @return array
      */
-    public static function execute(int $quizcmid, string $name, string $questiontext, int $correctanswer, float $defaultmark): array {
-        $params = self::validate_parameters(self::execute_parameters(),
-            compact('quizcmid', 'name', 'questiontext', 'correctanswer', 'defaultmark'));
+    public static function execute(
+        int $quizcmid,
+        string $name,
+        string $questiontext,
+        int $correctanswer,
+        float $defaultmark
+    ): array {
+        $params = self::validate_parameters(
+            self::execute_parameters(),
+            compact('quizcmid', 'name', 'questiontext', 'correctanswer', 'defaultmark')
+        );
         $fields = [
             'correctanswer' => $params['correctanswer'] ? 1 : 0,
             'feedbacktrue' => ['text' => '', 'format' => FORMAT_HTML, 'itemid' => 0],
             'feedbackfalse' => ['text' => '', 'format' => FORMAT_HTML, 'itemid' => 0],
             'penalty' => 1,
         ];
-        return question_helper::add('truefalse', $params['quizcmid'], $params['name'], $params['questiontext'],
-            $params['defaultmark'], $fields);
+        return question_helper::add(
+            'truefalse',
+            $params['quizcmid'],
+            $params['name'],
+            $params['questiontext'],
+            $params['defaultmark'],
+            $fields
+        );
     }
 
     /**

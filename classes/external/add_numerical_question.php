@@ -21,7 +21,6 @@ use core_external\external_function_parameters;
 use core_external\external_single_structure;
 use core_external\external_value;
 use local_fullmcp\helper;
-
 use core_external\external_multiple_structure;
 use local_fullmcp\question_helper;
 
@@ -64,8 +63,10 @@ class add_numerical_question extends external_api {
      * @return array
      */
     public static function execute(int $quizcmid, string $name, string $questiontext, array $answers, float $defaultmark): array {
-        $params = self::validate_parameters(self::execute_parameters(),
-            compact('quizcmid', 'name', 'questiontext', 'answers', 'defaultmark'));
+        $params = self::validate_parameters(
+            self::execute_parameters(),
+            compact('quizcmid', 'name', 'questiontext', 'answers', 'defaultmark')
+        );
         $context = \context_module::instance($params['quizcmid']);
         if (!$params['answers']) {
             throw new \core\exception\invalid_parameter_exception('At least one answer is required');
@@ -80,8 +81,14 @@ class add_numerical_question extends external_api {
             $fields['fraction'][$i] = question_helper::fraction($a['fraction']);
             $fields['feedback'][$i] = question_helper::text($context, $a['feedback']);
         }
-        return question_helper::add('numerical', $params['quizcmid'], $params['name'], $params['questiontext'],
-            $params['defaultmark'], $fields);
+        return question_helper::add(
+            'numerical',
+            $params['quizcmid'],
+            $params['name'],
+            $params['questiontext'],
+            $params['defaultmark'],
+            $fields
+        );
     }
 
     /**

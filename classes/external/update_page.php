@@ -22,7 +22,6 @@ use core_external\external_single_structure;
 use core_external\external_value;
 use local_fullmcp\helper;
 
-
 /**
  * Replace the content of a Page activity.
  *
@@ -64,6 +63,8 @@ class update_page extends external_api {
         [, , , $data] = get_moduleinfo_data($cmrecord, $course);
         // The form-less page_update_instance() expects the editor array and the unpacked display options.
         $data->page = ['text' => helper::html($context, $params['content']), 'format' => FORMAT_HTML, 'itemid' => 0];
+        // Core stores page display options serialized; no objects are allowed.
+        // phpcs:ignore moodle.PHP.ForbiddenFunctions.Found
         $options = (array) unserialize($data->displayoptions ?? '') + ['printintro' => 0, 'printlastmodified' => 1];
         $data->printintro = $options['printintro'];
         $data->printlastmodified = $options['printlastmodified'];

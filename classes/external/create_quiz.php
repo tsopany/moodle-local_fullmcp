@@ -22,7 +22,6 @@ use core_external\external_single_structure;
 use core_external\external_value;
 use local_fullmcp\helper;
 
-
 /**
  * Create an empty Quiz activity.
  *
@@ -66,11 +65,32 @@ class create_quiz extends external_api {
      * @param int $visible
      * @return array
      */
-    public static function execute(int $courseid, int $section, string $name, string $intro, int $timeopen, int $timeclose, int $timelimit, float $grade, int $attempts, int $visible): array {
+    public static function execute(
+        int $courseid,
+        int $section,
+        string $name,
+        string $intro,
+        int $timeopen,
+        int $timeclose,
+        int $timelimit,
+        float $grade,
+        int $attempts,
+        int $visible
+    ): array {
         global $CFG;
         require_once($CFG->dirroot . '/mod/quiz/locallib.php');
         $params = self::validate_parameters(self::execute_parameters(), compact(
-            'courseid', 'section', 'name', 'intro', 'timeopen', 'timeclose', 'timelimit', 'grade', 'attempts', 'visible'));
+            'courseid',
+            'section',
+            'name',
+            'intro',
+            'timeopen',
+            'timeclose',
+            'timelimit',
+            'grade',
+            'attempts',
+            'visible'
+        ));
         if ($params['timeclose'] && $params['timeopen'] > $params['timeclose']) {
             throw new \core\exception\invalid_parameter_exception('timeclose must be after timeopen');
         }
@@ -80,8 +100,10 @@ class create_quiz extends external_api {
         // Review options: show everything in every phase except overall feedback while the attempt is in progress.
         $review = [];
         foreach (['during', 'immediately', 'open', 'closed'] as $when) {
-            foreach (['attempt', 'correctness', 'maxmarks', 'marks', 'specificfeedback', 'generalfeedback', 'rightanswer',
-                    'overallfeedback'] as $what) {
+            foreach (
+                ['attempt', 'correctness', 'maxmarks', 'marks', 'specificfeedback', 'generalfeedback', 'rightanswer',
+                    'overallfeedback'] as $what
+            ) {
                 $review[$what . $when] = (int) !($when === 'during' && $what === 'overallfeedback');
             }
         }

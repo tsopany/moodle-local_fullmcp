@@ -19,7 +19,7 @@ namespace local_fullmcp;
 use core\exception\invalid_parameter_exception;
 use core\exception\required_capability_exception;
 use core_external\external_api;
-use PHPUnit\Framework\Attributes\CoversNamespace;
+use PHPUnit\Framework\Attributes\CoversNothing;
 use local_fullmcp\external\add_essay_question;
 use local_fullmcp\external\add_matching_question;
 use local_fullmcp\external\add_numerical_question;
@@ -36,7 +36,7 @@ use local_fullmcp\external\create_quiz;
  * @copyright  2026 Tsopany
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-#[CoversNamespace('local_fullmcp')]
+#[CoversNothing]
 final class quiz_test extends \advanced_testcase {
     /**
      * Course with an empty quiz, admin logged in.
@@ -47,8 +47,10 @@ final class quiz_test extends \advanced_testcase {
         $this->resetAfterTest();
         $this->setAdminUser();
         $course = $this->getDataGenerator()->create_course();
-        $quiz = external_api::clean_returnvalue(create_quiz::execute_returns(),
-            create_quiz::execute($course->id, 0, 'Quiz', '<p>Intro</p>', 0, 0, 600, 10.0, 2, 1));
+        $quiz = external_api::clean_returnvalue(
+            create_quiz::execute_returns(),
+            create_quiz::execute($course->id, 0, 'Quiz', '<p>Intro</p>', 0, 0, 600, 10.0, 2, 1)
+        );
         return [$course, $quiz];
     }
 
@@ -101,8 +103,11 @@ final class quiz_test extends \advanced_testcase {
             $question = \question_bank::load_question($result['questionid']);
             $this->assertEquals($qtype, $question->qtype->name());
         }
-        $this->assertEquals(7.0, (float) $DB->get_field('quiz', 'sumgrades', ['id' => $quiz['instanceid']]),
-            'Quiz total follows the slot marks: 2 + 5 * 1');
+        $this->assertEquals(
+            7.0,
+            (float) $DB->get_field('quiz', 'sumgrades', ['id' => $quiz['instanceid']]),
+            'Quiz total follows the slot marks: 2 + 5 * 1'
+        );
         $this->assertEquals(2.0, (float) $DB->get_field('quiz_slots', 'maxmark', ['quizid' => $quiz['instanceid'], 'slot' => 1]));
     }
 
@@ -134,7 +139,8 @@ final class quiz_test extends \advanced_testcase {
     public function test_invalid_questions_are_rejected(): void {
         [, $quiz] = $this->quiz();
         $cmid = $quiz['cmid'];
-        foreach ([
+        foreach (
+            [
             fn() => add_quiz_question::execute($cmid, 'MC', 'x', [['text' => 'only', 'fraction' => 1.0, 'feedback' => '']], 1, 1.0),
             fn() => add_quiz_question::execute($cmid, 'MC', 'x', [
                 ['text' => 'a', 'fraction' => 0.0, 'feedback' => ''],
@@ -145,7 +151,8 @@ final class quiz_test extends \advanced_testcase {
             fn() => add_shortanswer_question::execute($cmid, 'SA', 'x', [' '], 0, 1.0),
             fn() => add_essay_question::execute($cmid, 'ES', 'x', '', '', 15, 7, 1.0),
             fn() => add_matching_question::execute($cmid, 'MA', 'x', [['question' => 'a', 'answer' => 'b']], 1, 1.0),
-        ] as $i => $call) {
+            ] as $i => $call
+        ) {
             try {
                 $call();
                 $this->fail("Case $i should have been rejected");
